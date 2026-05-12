@@ -5,6 +5,7 @@ const shareBtn = document.getElementById('shareBtn');
 const chaosSlider = document.getElementById('chaosSlider');
 const chaosValue = document.getElementById('chaosValue');
 const themeToggleBtn = document.getElementById('themeToggleBtn');
+let hasCelebratedBingo = false;
 
 const cardKey = 'cap-bingo-card-v1';
 const markKey = 'cap-bingo-marks-v1';
@@ -118,6 +119,7 @@ function generateCard(extraChaos = 0) {
 }
 
 function renderBoard(board, marks = []) {
+  hasCelebratedBingo = false;
   boardEl.innerHTML = '';
   board.forEach((text, idx) => {
     const square = document.createElement('button');
@@ -132,10 +134,47 @@ function renderBoard(board, marks = []) {
       square.classList.toggle('marked');
       const currentMarks = [...document.querySelectorAll('.square.marked')].map(el => [...boardEl.children].indexOf(el));
       localStorage.setItem(markKey, JSON.stringify(currentMarks));
+      maybeCelebrateBingo(currentMarks);
     });
 
     boardEl.appendChild(square);
   });
+}
+
+function isBingo(marks) {
+  const marked = new Set(marks);
+  const lines = [];
+
+  for (let row = 0; row < 5; row++) {
+    lines.push([0, 1, 2, 3, 4].map(col => row * 5 + col));
+  }
+  for (let col = 0; col < 5; col++) {
+    lines.push([0, 1, 2, 3, 4].map(row => row * 5 + col));
+  }
+  lines.push([0, 6, 12, 18, 24], [4, 8, 12, 16, 20]);
+
+  return lines.some(line => line.every(idx => marked.has(idx)));
+}
+
+function launchFireworks() {
+  const total = 42;
+  for (let i = 0; i < total; i++) {
+    const spark = document.createElement('span');
+    spark.className = 'firework';
+    spark.textContent = ['✨', '🎆', '🎇', '💥'][Math.floor(Math.random() * 4)];
+    spark.style.left = `${Math.random() * 100}%`;
+    spark.style.top = `${10 + Math.random() * 70}%`;
+    spark.style.animationDelay = `${Math.random() * 280}ms`;
+    spark.style.fontSize = `${1 + Math.random() * 1.2}rem`;
+    document.body.appendChild(spark);
+    spark.addEventListener('animationend', () => spark.remove());
+  }
+}
+
+function maybeCelebrateBingo(marks) {
+  if (hasCelebratedBingo || !isBingo(marks)) return;
+  hasCelebratedBingo = true;
+  launchFireworks();
 }
 
 async function shareCardImage() {
@@ -177,6 +216,7 @@ function init() {
 
   if (savedBoard?.length === 25) {
     renderBoard(savedBoard, savedMarks);
+    maybeCelebrateBingo(savedMarks);
   } else {
     generateCard();
   }
