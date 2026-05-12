@@ -4,9 +4,11 @@ const worseBtn = document.getElementById('worseBtn');
 const shareBtn = document.getElementById('shareBtn');
 const chaosSlider = document.getElementById('chaosSlider');
 const chaosValue = document.getElementById('chaosValue');
+const themeToggleBtn = document.getElementById('themeToggleBtn');
 
 const cardKey = 'cap-bingo-card-v1';
 const markKey = 'cap-bingo-marks-v1';
+const themeKey = 'cap-bingo-theme-v1';
 
 const normalPool = [
   'Someone says “per regulation”', 'Form signed in wrong spot', 'Printer failure',
@@ -141,7 +143,8 @@ async function shareCardImage() {
     alert('Screenshot helper unavailable. Use a browser screenshot for now.');
     return;
   }
-  const canvas = await window.html2canvas(boardEl, { backgroundColor: '#1d2226' });
+  const pageBg = getComputedStyle(document.body).getPropertyValue('--bg').trim() || '#ffffff';
+  const canvas = await window.html2canvas(boardEl, { backgroundColor: pageBg });
   const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
   const file = new File([blob], 'cap-bingo-card.png', { type: 'image/png' });
 
@@ -155,7 +158,19 @@ async function shareCardImage() {
   }
 }
 
+
+function applyTheme(theme) {
+  const normalizedTheme = theme === 'dark' ? 'dark' : 'light';
+  document.body.setAttribute('data-theme', normalizedTheme);
+  const isDark = normalizedTheme === 'dark';
+  themeToggleBtn.textContent = isDark ? '☀️ Day Mode' : '🌙 Night Mode';
+  themeToggleBtn.setAttribute('aria-pressed', String(isDark));
+  localStorage.setItem(themeKey, normalizedTheme);
+}
+
 function init() {
+  const savedTheme = localStorage.getItem(themeKey) || 'light';
+  applyTheme(savedTheme);
   chaosValue.textContent = `${chaosSlider.value}%`;
   const savedBoard = JSON.parse(localStorage.getItem(cardKey) || 'null');
   const savedMarks = JSON.parse(localStorage.getItem(markKey) || '[]');
@@ -170,6 +185,11 @@ function init() {
 generateBtn.addEventListener('click', () => generateCard());
 worseBtn.addEventListener('click', () => generateCard(35));
 shareBtn.addEventListener('click', shareCardImage);
+themeToggleBtn.addEventListener('click', () => {
+  const nextTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  applyTheme(nextTheme);
+});
+
 chaosSlider.addEventListener('input', () => {
   chaosValue.textContent = `${chaosSlider.value}%`;
 });
