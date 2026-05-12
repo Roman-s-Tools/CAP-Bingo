@@ -88,14 +88,23 @@ const freeSpacePool = [
 
 const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
+function pickRandom(pool, count) {
+  if (count <= 0) return [];
+  const picks = [];
+  while (picks.length < count) {
+    picks.push(...shuffle(pool));
+  }
+  return picks.slice(0, count);
+}
+
 function generateCard(extraChaos = 0) {
   const chaosPct = Math.min(100, Number(chaosSlider.value) + extraChaos);
   const chaosCount = Math.max(2, Math.round((chaosPct / 100) * 24));
   const normalCount = 24 - chaosCount;
 
   const picks = [
-    ...shuffle(normalPool).slice(0, normalCount),
-    ...shuffle(chaosPool).slice(0, chaosCount)
+    ...pickRandom(normalPool, normalCount),
+    ...pickRandom(chaosPool, chaosCount)
   ];
 
   const board = shuffle(picks);
