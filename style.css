@@ -1,0 +1,121 @@
+:root {
+  --bg: #1d2226;
+  --panel: #2a3136;
+  --ink: #e9ecef;
+  --muted: #aeb8bf;
+  --accent: #84c2ff;
+  --warning: #f1b24a;
+  --marked: #3f5f73;
+  --grid: #5f707c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 20% 10%, #2e3840, transparent 38%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.02) 0 2px, transparent 2px 6px),
+    var(--bg);
+}
+
+.app-shell {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 1rem 1rem 2rem;
+}
+
+.app-header h1 {
+  margin: 0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.subtitle { margin-top: 0.35rem; color: var(--muted); }
+
+.controls {
+  margin: 1rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.65rem;
+  background: rgba(16, 21, 26, 0.7);
+  border: 1px solid #3a474f;
+  padding: 0.8rem;
+  border-radius: 8px;
+}
+
+.btn {
+  border: 1px solid #5f707c;
+  background: #334049;
+  color: var(--ink);
+  border-radius: 6px;
+  padding: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:hover { filter: brightness(1.1); }
+.btn-primary { border-color: var(--accent); }
+.btn-warning { border-color: var(--warning); }
+
+.chaos-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+input[type="range"] { width: 100%; }
+
+.board-wrap {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,.18));
+  border: 1px solid #41515c;
+  padding: 0.65rem;
+  border-radius: 10px;
+}
+
+.bingo-board {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.square {
+  border: 1px solid var(--grid);
+  background: var(--panel);
+  padding: 0.6rem;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.25;
+  user-select: none;
+  cursor: pointer;
+}
+
+.square.marked {
+  background: linear-gradient(180deg, #4a6c82, var(--marked));
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.square.free {
+  font-weight: 800;
+  border-color: var(--accent);
+}
+
+.app-footer {
+  text-align: center;
+  margin-top: 0.8rem;
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .square { min-height: 84px; font-size: 0.78rem; padding: 0.45rem; }
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAP Bingo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <h1>CAP Bingo</h1>
+      <p class="subtitle">One giant shared pool. Maximum operational chaos.</p>
+    </header>
+
+    <section class="controls" aria-label="Bingo controls">
+      <button id="generateBtn" class="btn btn-primary">🎯 Generate Bingo Card</button>
+      <button id="worseBtn" class="btn btn-warning">🧨 Generate Worse Card</button>
+      <button id="shareBtn" class="btn">📸 Share Card Image</button>
+
+      <label class="chaos-control" for="chaosSlider">
+        <span>Chaos Slider: <strong id="chaosValue">30%</strong></span>
+        <input type="range" id="chaosSlider" min="0" max="100" value="30" />
+      </label>
+    </section>
+
+    <section class="board-wrap" aria-live="polite">
+      <div id="bingoBoard" class="bingo-board" role="grid" aria-label="CAP Bingo board"></div>
+    </section>
+
+    <footer class="app-footer">
+      <small>70% accurate • 20% absurd • 10% nonsense</small>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
